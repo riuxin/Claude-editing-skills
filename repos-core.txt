@@ -1,0 +1,13 @@
+# The 12-repo starter stack. Install this first — it covers the whole job.
+remotion-dev/skills
+kajisho5/ffmpeg-skill
+bangtutorial/bang-motion
+charlie947/motion-graphics-skills
+echris6/motion-video-kit
+vincentsch/explainroo
+appariciojunior/video-editor-skills
+lordhoell/davinci-resolve-mcp
+nateherkai/herk-edit-kit
+Jakeschincariol/youtube-agent-skill
+lemomo-ai/lemo-opuscar
+Nutlope/hallmark
