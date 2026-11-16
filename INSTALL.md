@@ -33,7 +33,8 @@ git clone https://github.com/riuxin/Claude-editing-skills.git
 cd Claude-editing-skills
 
 bash scripts/install.sh                  # dry run: prints every skill that would land
-bash scripts/install.sh --install        # the 12-repo starter stack
+bash scripts/install.sh --install        # minimal tier — 5 skills
+bash scripts/install.sh --install --core # core tier — 72 skills (measure with /skill-doctor)
 bash scripts/install.sh --install --all  # everything (300+ skills — see the warning)
 bash scripts/install.sh --install remotion-dev/skills bangtutorial/bang-motion
 ```

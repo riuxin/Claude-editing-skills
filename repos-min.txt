@@ -1,0 +1,11 @@
+# 5 skills. Start here: one skill from each corner of the job, ~5 skills of context total.
+#   ffmpeg-skill      scissors: cut, caption, reframe, loudness, platform exports
+#   bang-motion       motion graphics: openers, bumpers, kinetic type, explainer styles
+#   explainroo        topic/brief -> finished film with sound
+#   davinci-resolve-mcp  440+ Resolve API calls (needs Resolve Studio installed)
+#   hallmark          anti-AI-slop design taste, applied before you judge a render
+kajisho5/ffmpeg-skill
+bangtutorial/bang-motion
+vincentsch/explainroo
+lordhoell/davinci-resolve-mcp
+Nutlope/hallmark

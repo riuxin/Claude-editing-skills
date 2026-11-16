@@ -1,51 +1,67 @@
 # Claude editing skills
-**171 GitHub repos, 174 graded skills, that turn Claude Code into a video / motion / editing / content studio — with an installer that puts them where Claude Code reads skills.**
+**171 GitHub repos, 174 graded skills, that turn Claude Code into a video / motion / editing / content studio — with an installer that puts them where Claude Code actually reads skills.**
 Curated and verified 2026-11-17. Every repo resolved live through the GitHub API. Security grades come from [Agent Skills Hub](https://agentskillshub.top/best/claude-video-skills/), the only index that reads each repo and runs 16 of them end to end.
 ---
 ## Tell Claude to install it
 Paste this into Claude Code:
 ```text
 Clone https://github.com/riuxin/Claude-editing-skills.git, read INSTALL.md, then run
-scripts/install.sh --install so every skill in repos-core.txt lands in ~/.claude/skills.
-Report which skills installed and which need an API key.
+bash scripts/install.sh --install  (that is repos-min.txt: 5 skills).
+Verify each entry has a SKILL.md, then tell me the context cost from /skill-doctor.
+Do not run --core or --all in this pass.
 ```
-Or do it yourself:
+By hand:
 ```bash
 git clone https://github.com/riuxin/Claude-editing-skills.git
 cd Claude-editing-skills
-bash scripts/install.sh                 # dry run: see exactly what would land
-bash scripts/install.sh --install       # install the 12-repo starter stack
-bash scripts/install.sh --install --all # install everything (heavy — read the warning below)
+
+bash scripts/install.sh                      # dry run, repos-min.txt (5 skills)
+bash scripts/install.sh --install            # install those 5
+bash scripts/install.sh --install --core     # 72 skills — heavy, see the budget below
+bash scripts/install.sh --install --all      # 300+ skills — do not do this blindly
 ```
+---
+## Three tiers, with the real numbers
+Measured by running the installer against each list, not estimated.
+| Tier | File | Repos | Individual skills | When |
+|---|---|---:|---:|---|
+| Minimal | `repos-min.txt` | 5 | **5** | Default. Covers edit, motion, explainer, NLE, taste. |
+| Core | `repos-core.txt` | 12 | **72** | When you are doing client video work weekly and accept the context cost. |
+| Full | `repos.txt` | 171 | 300+ | Reference only. Add repos one at a time from it. |
+**72 skills is not a starter pack.** Every loaded skill adds to every turn whether it fires or not. The core tier exists because the big motion and editing repos happen to ship 11–15 skills each — useful, but they should be a deliberate second step, measured with `/skill-doctor`.
+### Minimal tier (5 skills)
+| Repo | Skills | Why |
+|---|---:|---|
+| [kajisho5/ffmpeg-skill](https://github.com/kajisho5/ffmpeg-skill) | 1 | Scissors: cut, join, reframe, speed, captions, loudness, platform exports. 42 tools, local, no API key. |
+| [bangtutorial/bang-motion](https://github.com/bangtutorial/bang-motion) | 1 | Motion graphics: openers, promos, bumpers, kinetic typography, five explainer styles. |
+| [vincentsch/explainroo](https://github.com/vincentsch/explainroo) | 1 | Brief to finished film with sound in ~2 minutes. Fastest in the 16-skill bake-off. |
+| [lordhoell/davinci-resolve-mcp](https://github.com/lordhoell/davinci-resolve-mcp) | 1 | 440+ DaVinci Resolve API calls. Your renderer becomes Resolve instead of Remotion. |
+| [Nutlope/hallmark](https://github.com/Nutlope/hallmark) | 1 | Anti-AI-slop design taste. Install before judging any render. |
+
+### Core tier adds these 67 skills
+| Repo | Skills | Why |
+|---|---:|---|
+| [remotion-dev/skills](https://github.com/remotion-dev/skills) | 13 | The render engine: official Remotion skills, most reliable path tested. |
+| [charlie947/motion-graphics-skills](https://github.com/charlie947/motion-graphics-skills) | 15 | Launch-grade motion, every frame code, no After Effects. |
+| [echris6/motion-video-kit](https://github.com/echris6/motion-video-kit) | 1 | Motion films with an independent critic loop — best-looking, ~22 min. |
+| [appariciojunior/video-editor-skills](https://github.com/appariciojunior/video-editor-skills) | 12 | First-pass editing in DaVinci: transcript cuts, vlog pacing. |
+| [nateherkai/herk-edit-kit](https://github.com/nateherkai/herk-edit-kit) | 15 | Reels and Shorts end to end: cuts, captions, style library, showreel. |
+| [Jakeschincariol/youtube-agent-skill](https://github.com/Jakeschincariol/youtube-agent-skill) | 11 | Packaging: 21 hook formulas with scoring, titles, retention, SEO. |
+| [lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) | 2 | 99 code-made film styles, built with Opus 5.5. The look library. |
+
 ---
 ## Contents
 | File | What it is |
 |---|---|
 | `skills.json` | Machine-readable catalog: 174 entries with repo, URL, stars, security grade, licence, category and a one-line note. This is what an agent should read. |
-| `repos-core.txt` | The 12-repo starter stack. Install this. |
+| `repos-min.txt` | 5-repo minimal tier. The default. |
+| `repos-core.txt` | 12-repo core tier (72 skills). |
 | `repos.txt` | All 171 repos. |
-| `scripts/install.sh` | Dry-run-by-default installer. Clones, finds every `SKILL.md`, copies real directories into `~/.claude/skills`. Idempotent. |
-| `INSTALL.md` | Step-by-step, including the plugin-marketplace path and how to back out. |
-| `catalog.md` | The full written catalog — every entry with what it does and why it's here. |
-| `claude_code_content_skills.csv` | Superset: 836 repos of video + content skills, sortable. |
----
-## The 12-repo starter stack
-Covers the whole job: engine, scissors, motion, look, explainers, real-footage editing, NLE control, reels, packaging, style library, taste.
-| # | Repo | Why |
-|---:|---|---|
-| 1 | [remotion-dev/skills](https://github.com/remotion-dev/skills) | The render engine. Most reliable path tested (4.5 min), official Remotion, 7.3k stars. |
-| 2 | [kajisho5/ffmpeg-skill](https://github.com/kajisho5/ffmpeg-skill) | 42 FFmpeg tools + MCP. Everything downstream calls it. |
-| 3 | [bangtutorial/bang-motion](https://github.com/bangtutorial/bang-motion) | Browser motion graphics: openers, bumpers, kinetic type, 5 explainer styles. |
-| 4 | [charlie947/motion-graphics-skills](https://github.com/charlie947/motion-graphics-skills) | 13 launch-grade motion skills, every frame code, no After Effects. |
-| 5 | [echris6/motion-video-kit](https://github.com/echris6/motion-video-kit) | Same job with an independent critic loop — the best-looking output in the bake-off (~22 min). |
-| 6 | [vincentsch/explainroo](https://github.com/vincentsch/explainroo) | Brief to finished film with sound in 2.0 minutes. Won the 16-skill bake-off. |
-| 7 | [appariciojunior/video-editor-skills](https://github.com/appariciojunior/video-editor-skills) | First-pass editing in DaVinci: transcript cuts, vlog pacing. |
-| 8 | [lordhoell/davinci-resolve-mcp](https://github.com/lordhoell/davinci-resolve-mcp) | 440+ DaVinci Resolve API calls. Once this is in, Resolve is your renderer. |
-| 9 | [nateherkai/herk-edit-kit](https://github.com/nateherkai/herk-edit-kit) | 15 skills for reels and Shorts — the volume work. |
-| 10 | [Jakeschincariol/youtube-agent-skill](https://github.com/Jakeschincariol/youtube-agent-skill) | Packaging: hooks with scoring, titles, retention. Decides if anyone watches. |
-| 11 | [lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) | 99 code-made film styles built with Opus 5.5. The look library. |
-| 12 | [Nutlope/hallmark](https://github.com/Nutlope/hallmark) | Anti-AI-slop design skill. Install before judging any render. |
-
+| `scripts/install.sh` | Dry-run-by-default installer. Clones, finds every `SKILL.md`, copies real directories into `~/.claude/skills`. Idempotent. `--min` / `--core` / `--all`. |
+| `INSTALL.md` | Step-by-step, plugin-marketplace path, requirements per skill, how to back out. |
+| `CLAUDE.md` | Guardrails Claude reads if it opens this repo. |
+| `catalog.md` | The full written catalog — every entry, what it does, why it's here. |
+| `claude_code_content_skills.csv` | Superset: 836 repos of video and content skills, sortable. |
 ---
 ## Everything, by job
 ### 1. All-in-one production systems — pick one as the base (12)
@@ -272,11 +288,11 @@ Covers the whole job: engine, scissors, motion, look, explainers, real-footage e
 
 ---
 ## Read this before installing everything
-1. **Each loaded skill costs context on every turn, loaded or not.** `repos.txt` is roughly 300+ individual skills. Install `repos-core.txt`, run `/skill-doctor`, then add from `repos.txt` one repo at a time.
-2. **A skill does not beat no skill by default.** On an identical 15-second brief, Claude Code with no skill produced a passing film in 4.4 minutes; all 16 tested skills did too. What skills add is a look, a workflow, or footage-handling. Use them for those, not for a plain promo.
-3. **18 repos are graded CAUTION** (notably `OpenMontageInc/OpenMontage`, 80.9k stars). They ship shell-outs and broad file access. Read before running.
-4. **Licences:** most are MIT or Apache-2.0; about a quarter declare no licence. Using a skill locally is fine. Redistributing what it generates is your call — check the repo.
-5. **Nothing is vendored here.** This repo holds a catalog and an installer; it clones from each author's own repository, so credit and updates stay with them.
+1. **Context is the real cost, not disk.** Loaded skills sit in every turn's context. Start at 5, run `/skill-doctor`, then add.
+2. **A skill does not beat no skill by default.** On an identical 15-second brief, Claude Code with no skill produced a passing film in 4.4 minutes, and so did all 16 tested skills. What skills add is a look, a workflow, or footage handling. Use them for those.
+3. **18 repos are graded CAUTION** — notably `OpenMontageInc/OpenMontage` (80.9k stars). They shell out and touch your filesystem broadly. Read before running.
+4. **Licences:** most are MIT or Apache-2.0; about a quarter declare none. Local use is fine; redistributing output is your call and the repo's terms decide it.
+5. **Nothing is vendored here.** This repo is a catalog plus an installer. It clones from each author's repository, so credit and updates stay with them.
 
 ## Sources
 
@@ -284,4 +300,4 @@ Covers the whole job: engine, scissors, motion, look, explainers, real-footage e
 - [JuneYaooo/awesome-ai-media-skills](https://github.com/JuneYaooo/awesome-ai-media-skills) — video-gen MCPs, social MCPs, content skills, A–C grades.
 - [opusvideo/awesome-claude-video](https://github.com/opusvideo/awesome-claude-video) — what people made with Opus 5.5.
 - [rohitg00/awesome-claude-design](https://github.com/rohitg00/awesome-claude-design) — DESIGN.md prompts and video teardowns.
-- GitHub search API for the non-video half (thumbnails, SEO, copywriting, social, audio, NLE bridges).
+- GitHub search API for the non-video half: thumbnails, SEO, copywriting, social, audio, NLE bridges.

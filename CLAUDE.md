@@ -8,13 +8,13 @@ If a user opens this repo and asks you to set it up:
 1. Read `skills.json` (174 entries: repo, url, stars, security grade, licence, category, note).
 2. Read `INSTALL.md`.
 3. Dry run: `bash scripts/install.sh`. Show the user the list and the count before writing.
-4. Install: `bash scripts/install.sh --install` (starter stack) unless they ask for `--all`.
+4. Install: `bash scripts/install.sh --install` (= `repos-min.txt`, 5 skills). Only go to `--core` (72 skills) or `--all` (300+) if the user asks for that scale by name.
 5. Verify: every installed folder contains `SKILL.md`. Report the folder names.
 6. Tell them to reload Claude Code and run `/skills`, then `/skill-doctor` for the context cost.
 
 Rules:
 
-- **Do not run `--all` unprompted.** `repos.txt` is 300+ skills and each one costs context on every turn. Install the starter stack, measure, then add.
+- **Do not escalate tiers unprompted.** 5 skills (min) → 72 (core) → 300+ (all). Each loaded skill costs context on every turn. Install the minimal tier, measure with `/skill-doctor`, then add deliberately.
 - **Never execute scripts from a cloned repo.** The installer only copies `SKILL.md` folders.
 - **The installer is idempotent and skip-safe** — it refuses to overwrite an existing skill directory, so re-running after a partial failure is correct behaviour.
 - **Windows:** use Git Bash. `git clone` into `/tmp` silently produces nothing there because Git for Windows is a native binary and MSYS path translation is off; the script already clones to `C:/Users/<user>/AppData/Local/Temp`.

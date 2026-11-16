@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # install.sh — install Claude Code video/content skills listed in this repo.
 #
-#   bash scripts/install.sh                      # dry run against repos-core.txt
-#   bash scripts/install.sh --install            # install repos-core.txt
-#   bash scripts/install.sh --install --all      # install repos.txt (the full stack)
+#   bash scripts/install.sh                      # dry run against repos-min.txt (5 skills)
+#   bash scripts/install.sh --install            # install repos-min.txt
+#   bash scripts/install.sh --install --core     # repos-core.txt (72 skills — real context cost)
+#   bash scripts/install.sh --install --all      # repos.txt (the full stack, 300+ skills)
 #   bash scripts/install.sh --install remotion-dev/skills bangtutorial/bang-motion
 #   CLAUDE_SKILLS_DIR=/somewhere bash scripts/install.sh --install
 #
@@ -31,15 +32,17 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(dirname "$HERE")"
 DEST="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
 MODE="dry"
-LIST="$ROOT/repos-core.txt"
+LIST="$ROOT/repos-min.txt"
 
 for a in "$@"; do
   case "$a" in
     --install) MODE="install" ;;
     --dry)     MODE="dry" ;;
+    --min)     LIST="$ROOT/repos-min.txt" ;;
+    --core)    LIST="$ROOT/repos-core.txt" ;;
     --all)     LIST="$ROOT/repos.txt" ;;
     --file)    LIST="" ;;   # consumed below
-    -h|--help) sed -n '2,24p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,25p' "$0"; exit 0 ;;
   esac
 done
 
