@@ -1,0 +1,9 @@
+# Keep LF in everything that a shell or an installer reads. Windows checkouts
+# default to CRLF, which breaks `bash scripts/install.sh` and adds a stray \r to
+# every repo name in repos*.txt.
+* text=auto
+*.sh    text eol=lf
+*.txt   text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+*.csv   text eol=lf
