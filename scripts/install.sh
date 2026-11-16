@@ -6,7 +6,13 @@
 #   bash scripts/install.sh --install --core     # repos-core.txt (72 skills — real context cost)
 #   bash scripts/install.sh --install --all      # repos.txt (the full stack, 300+ skills)
 #   bash scripts/install.sh --install remotion-dev/skills bangtutorial/bang-motion
+#   bash scripts/install.sh --rename-conflicts   # keep both copies when two repos ship the
+#                                                # same skill name (e.g. edit-video)
+#   bash scripts/install.sh --print-paths        # show platform + clone paths and exit
 #   CLAUDE_SKILLS_DIR=/somewhere bash scripts/install.sh --install
+#
+# Works on Windows (Git Bash), macOS and Linux. On Windows the clone path is
+# converted to C:/... because git is a native binary; elsewhere it is the POSIX path.
 #
 # Target: ~/.claude/skills/<skill-name>/SKILL.md  (personal skills: every project)
 #
@@ -32,6 +38,7 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(dirname "$HERE")"
 DEST="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
 MODE="dry"
+RENAME_CONFLICTS="0"
 LIST="$ROOT/repos-min.txt"
 
 for a in "$@"; do
@@ -41,6 +48,7 @@ for a in "$@"; do
     --min)     LIST="$ROOT/repos-min.txt" ;;
     --core)    LIST="$ROOT/repos-core.txt" ;;
     --all)     LIST="$ROOT/repos.txt" ;;
+    --rename-conflicts) RENAME_CONFLICTS="1" ;;
     --file)    LIST="" ;;   # consumed below
     -h|--help) sed -n '2,25p' "$0"; exit 0 ;;
   esac
@@ -53,9 +61,32 @@ for a in "$@"; do
   prev="$a"
 done
 
-WORK_MSYS="$HOME/AppData/Local/Temp/cc-skill-clone"
-WORK_WIN="$(cygpath -m "$HOME" 2>/dev/null || echo "C:/Users/$(whoami)")/AppData/Local/Temp/cc-skill-clone"
-mkdir -p "$WORK_MSYS"; rm -rf "$WORK_MSYS"/* 2>/dev/null
+WORK_MSYS="${SKILL_HUB_TMP:-$HOME/AppData/Local/Temp/cc-skill-clone}"
+# Git for Windows is a native binary: it cannot write to an MSYS path like /c/... or /tmp.
+# Everywhere else the POSIX path IS the real path, so both must be identical.
+# CC_PLATFORM=posix|windows forces a branch (used to test the Linux path from Windows).
+PLATFORM="${CC_PLATFORM:-auto}"
+if [ "$PLATFORM" = "auto" ]; then
+  case "$(uname -s 2>/dev/null)" in
+    MINGW*|MSYS*|CYGWIN*) PLATFORM="windows" ;;
+    *)                    PLATFORM="posix" ;;
+  esac
+fi
+if [ "$PLATFORM" = "windows" ] && command -v cygpath >/dev/null 2>&1; then
+  WORK_WIN="$(cygpath -m "$WORK_MSYS")"
+else
+  WORK_WIN="$WORK_MSYS"
+fi
+
+if [ "${1:-}" = "--print-paths" ]; then
+  echo "platform:  $PLATFORM"
+  echo "WORK_MSYS: $WORK_MSYS"
+  echo "WORK_WIN:  $WORK_WIN"
+  echo "target:    $DEST"
+  exit 0
+fi
+
+mkdir -p "$WORK_MSYS" && rm -rf "${WORK_MSYS:?}"/* 2>/dev/null
 
 # explicit repos on the command line override the list file
 REPOS=()
@@ -76,19 +107,37 @@ fi
 echo "mode:   $MODE"
 echo "list:   $(basename "$LIST" 2>/dev/null) (${#REPOS[@]} repos)"
 echo "target: $DEST"
+echo "clone:  $WORK_WIN  ($PLATFORM)"
 echo
 
 mkdir -p "$DEST"
 installed=0; skipped=0; failed=0
 
 place() {  # place <src_dir> <skill_name> <repo>
-  local sdir="$1" sname="$2" repo="$3"
+  local sdir="$1" sname="$2" repo="$3" origin alt
   if [ -e "$DEST/$sname" ]; then
-    echo "EXISTS   $sname"; skipped=$((skipped+1)); return
+    origin="$(cat "$DEST/$sname/.cc-source" 2>/dev/null || true)"
+    if [ "$origin" = "$repo" ]; then
+      echo "EXISTS   $sname (already installed from $repo)"
+      skipped=$((skipped+1)); return
+    fi
+    # Same skill name from a different source: never overwrite, never drop.
+    if [ -n "$origin" ] || [ "$RENAME_CONFLICTS" = "1" ]; then
+      alt="$sname--$(echo "$repo" | tr '/' '-' | tr 'A-Z' 'a-z')"
+      if [ -e "$DEST/$alt" ]; then
+        echo "EXISTS   $alt"; skipped=$((skipped+1)); return
+      fi
+      echo "RENAME   $sname <- $repo  as  $alt  (name taken${origin:+ by $origin})"
+      sname="$alt"
+    else
+      echo "EXISTS   $sname (installed before .cc-source markers existed; use --rename-conflicts to keep both)"
+      skipped=$((skipped+1)); return
+    fi
   fi
   if [ "$MODE" = "install" ]; then
     cp -r "$sdir" "$DEST/$sname" && rm -rf "$DEST/$sname/.git"
     if [ -f "$DEST/$sname/SKILL.md" ]; then
+      printf '%s\n' "$repo" > "$DEST/$sname/.cc-source"
       echo "OK       $sname  <- $repo"; installed=$((installed+1))
     else
       echo "FAIL     $sname (no SKILL.md after copy)"; failed=$((failed+1))

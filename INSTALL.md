@@ -21,8 +21,12 @@ Clone https://github.com/riuxin/Claude-editing-skills.git to a temp dir, cd into
 Do not install repos.txt --all in the same pass. Starter stack only.
 ```
 
-Claude needs: `git`, `bash`. On Windows use Git Bash (the script clones to a native
-`C:/` path because Git for Windows cannot clone into `/tmp`).
+Claude needs: `git`, `bash`. Works on Linux, macOS and Windows (Git Bash).
+
+The script picks the clone path by platform: on Windows it converts to a `C:/...` path
+because Git for Windows is a native binary and cannot write to `/tmp` or `/c/...`; on
+Linux and macOS the POSIX path is used as-is. `bash scripts/install.sh --print-paths`
+shows which one it chose before anything is cloned.
 
 ---
 
@@ -34,7 +38,7 @@ cd Claude-editing-skills
 
 bash scripts/install.sh                  # dry run: prints every skill that would land
 bash scripts/install.sh --install        # minimal tier — 5 skills
-bash scripts/install.sh --install --core # core tier — 72 skills (measure with /skill-doctor)
+bash scripts/install.sh --install --core # core tier — 74 skills (measure with /skill-doctor)
 bash scripts/install.sh --install --all  # everything (300+ skills — see the warning)
 bash scripts/install.sh --install remotion-dev/skills bangtutorial/bang-motion
 ```
@@ -44,6 +48,12 @@ Custom target:
 ```bash
 CLAUDE_SKILLS_DIR=~/work/skills bash scripts/install.sh --install
 ```
+
+**Name collisions.** Several repos ship a skill with the same folder name (`edit-video`,
+`captions`, the `hyperframes*` family). The installer keeps the first and installs the
+later one as `<name>--<owner>-<repo>`, so nothing is silently lost. `--rename-conflicts`
+does the same for folders that predate this behaviour. Every skill folder gets a
+`.cc-source` marker recording which repo it came from, which is what makes re-runs safe.
 
 What the script does, exactly:
 

@@ -22,13 +22,13 @@ bash scripts/install.sh --install --all      # 300+ skills — do not do this bl
 ```
 ---
 ## Three tiers, with the real numbers
-Measured by running the installer against each list, not estimated.
+Measured by running the installer against each list on a clean target, not estimated. Works on Windows (Git Bash), macOS and Linux.
 | Tier | File | Repos | Individual skills | When |
 |---|---|---:|---:|---|
 | Minimal | `repos-min.txt` | 5 | **5** | Default. Covers edit, motion, explainer, NLE, taste. |
-| Core | `repos-core.txt` | 12 | **72** | When you are doing client video work weekly and accept the context cost. |
+| Core | `repos-core.txt` | 12 | **74** | When you are doing client video work weekly and accept the context cost. |
 | Full | `repos.txt` | 171 | 300+ | Reference only. Add repos one at a time from it. |
-**72 skills is not a starter pack.** Every loaded skill adds to every turn whether it fires or not. The core tier exists because the big motion and editing repos happen to ship 11–15 skills each — useful, but they should be a deliberate second step, measured with `/skill-doctor`.
+**74 skills is not a starter pack.** Every loaded skill adds to every turn whether it fires or not. The core tier exists because the big motion and editing repos happen to ship 11–15 skills each — useful, but they should be a deliberate second step, measured with `/skill-doctor`.
 ### Minimal tier (5 skills)
 | Repo | Skills | Why |
 |---|---:|---|
@@ -38,7 +38,7 @@ Measured by running the installer against each list, not estimated.
 | [lordhoell/davinci-resolve-mcp](https://github.com/lordhoell/davinci-resolve-mcp) | 1 | 440+ DaVinci Resolve API calls. Your renderer becomes Resolve instead of Remotion. |
 | [Nutlope/hallmark](https://github.com/Nutlope/hallmark) | 1 | Anti-AI-slop design taste. Install before judging any render. |
 
-### Core tier adds these 67 skills
+### Core tier adds these 69 skills
 | Repo | Skills | Why |
 |---|---:|---|
 | [remotion-dev/skills](https://github.com/remotion-dev/skills) | 13 | The render engine: official Remotion skills, most reliable path tested. |
@@ -49,6 +49,12 @@ Measured by running the installer against each list, not estimated.
 | [Jakeschincariol/youtube-agent-skill](https://github.com/Jakeschincariol/youtube-agent-skill) | 11 | Packaging: 21 hook formulas with scoring, titles, retention, SEO. |
 | [lemomo-ai/lemo-opuscar](https://github.com/lemomo-ai/lemo-opuscar) | 2 | 99 code-made film styles, built with Opus 5.5. The look library. |
 
+### Two repos, one skill name
+
+`edit-video`, `captions` and the `hyperframes*` family each exist in more than one repo. The installer never overwrites and never drops: it keeps the first and installs the second as `<name>--<owner>-<repo>`, e.g. `edit-video--nateherkai-herk-edit-kit`. Every install writes a `.cc-source` marker inside the skill folder, so a re-run knows what came from where and skips cleanly.
+
+Older installs made before markers existed cannot be attributed, so those names are skipped with a note. `--rename-conflicts` keeps both copies anyway.
+
 ---
 ## Contents
 | File | What it is |
@@ -57,7 +63,7 @@ Measured by running the installer against each list, not estimated.
 | `repos-min.txt` | 5-repo minimal tier. The default. |
 | `repos-core.txt` | 12-repo core tier (72 skills). |
 | `repos.txt` | All 171 repos. |
-| `scripts/install.sh` | Dry-run-by-default installer. Clones, finds every `SKILL.md`, copies real directories into `~/.claude/skills`. Idempotent. `--min` / `--core` / `--all`. |
+| `scripts/install.sh` | Dry-run-by-default installer. Clones, finds every `SKILL.md`, copies real directories into `~/.claude/skills`. Idempotent. `--min` / `--core` / `--all`, `--rename-conflicts`, `--print-paths`. |
 | `INSTALL.md` | Step-by-step, plugin-marketplace path, requirements per skill, how to back out. |
 | `CLAUDE.md` | Guardrails Claude reads if it opens this repo. |
 | `catalog.md` | The full written catalog — every entry, what it does, why it's here. |
