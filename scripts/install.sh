@@ -92,6 +92,7 @@ mkdir -p "$WORK_MSYS" && rm -rf "${WORK_MSYS:?}"/* 2>/dev/null
 REPOS=()
 for a in "$@"; do
   case "$a" in --*) continue ;; esac
+  a="${a%$'\r'}"
   [ "$a" = "$LIST" ] && continue
   if [[ "$a" == */* ]]; then REPOS+=("$a"); fi
 done
@@ -173,7 +174,7 @@ for repo in "${REPOS[@]}"; do
     [ -z "$f" ] && continue
     found=1
     place "$(dirname "$f")" "$(basename "$(dirname "$f")" | tr 'A-Z' 'a-z' | tr -c 'a-z0-9._-' '-' | sed 's/-\+$//')" "$repo"
-  done < <(find "$src" -maxdepth 4 -name SKILL.md \
+  done < <(find "$src" -maxdepth 6 -name SKILL.md \
              -not -path "*/.git/*" -not -path "*/node_modules/*" \
              -not -path "*/.claude/*" -not -path "*/evals/*" \
              -not -path "*/examples/*" -not -path "*/tests/*" \

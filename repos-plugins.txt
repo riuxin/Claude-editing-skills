@@ -1,0 +1,19 @@
+# Plugins from the Claude Directory (community catalog), as installable skills.
+# Source: anthropics/claude-plugins-community marketplace.json — names are what you type
+# in Directory > Plugins. Each repo here shipped a plugin; this list turns them into
+# personal skills in ~/.claude/skills instead.
+#
+# eversince-ai/plugin is listed in the catalog but the repo is 404 — left out on purpose.
+# Install: bash scripts/install.sh --install --file repos-plugins.txt
+pasie15/remotion-skills-marketplace
+vaddisrinivas/framecraft
+VideoZero/claude-plugin
+Golpo-AI/golpo-claude-skill
+jordanrendric/claude-video-vision
+MarcinSufa/claude-watch-video
+alicicek/claude-transcribe
+VoxFlowStudio/skills
+phamvuhoang/muapi-marketing-video-plugin
+mutonby/upload-post-plugin
+adaptlypost/claude-plugin
+post-bridge-hq/agent-mode

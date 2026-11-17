@@ -28,6 +28,7 @@ Measured by running the installer against each list on a clean target, not estim
 | Minimal | `repos-min.txt` | 5 | **5** | Default. Covers edit, motion, explainer, NLE, taste. |
 | Core | `repos-core.txt` | 12 | **74** | When you are doing client video work weekly and accept the context cost. |
 | Full | `repos.txt` | 171 | 300+ | Reference only. Add repos one at a time from it. |
+| Directory plugins | `repos-plugins.txt` | 12 | varies | Plugins you'd otherwise add by name in Directory > Plugins, installed as personal skills instead. |
 **74 skills is not a starter pack.** Every loaded skill adds to every turn whether it fires or not. The core tier exists because the big motion and editing repos happen to ship 11–15 skills each — useful, but they should be a deliberate second step, measured with `/skill-doctor`.
 ### Minimal tier (5 skills)
 | Repo | Skills | Why |
@@ -63,6 +64,7 @@ Older installs made before markers existed cannot be attributed, so those names 
 | `repos-min.txt` | 5-repo minimal tier. The default. |
 | `repos-core.txt` | 12-repo core tier (72 skills). |
 | `repos.txt` | All 171 repos. |
+| `repos-plugins.txt` | 12 Directory plugins (HyperFrames, Remotion, FrameCraft, Golpo, VoxFlow, upload-post…) as installable skill repos. |
 | `scripts/install.sh` | Dry-run-by-default installer. Clones, finds every `SKILL.md`, copies real directories into `~/.claude/skills`. Idempotent. `--min` / `--core` / `--all`, `--rename-conflicts`, `--print-paths`. |
 | `INSTALL.md` | Step-by-step, plugin-marketplace path, requirements per skill, how to back out. |
 | `CLAUDE.md` | Guardrails Claude reads if it opens this repo. |
